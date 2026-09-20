@@ -3,9 +3,9 @@
 import { Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { navLinks, site } from "@/lib/site";
+import { navLinks, type SiteInfo } from "@/lib/site";
 
-export default function Header() {
+export default function Header({ info }: { info: SiteInfo }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ export default function Header() {
           className="font-display text-xl font-semibold text-ink md:text-2xl"
           onClick={() => setOpen(false)}
         >
-          Giggles<span className="text-primary"> Dental Care</span>
+          {info.name}
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
@@ -33,10 +33,10 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <a
-            href={`tel:${site.phone}`}
+            href={`tel:${info.phone}`}
             className="hidden items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-ink hover:bg-mint lg:inline-flex"
           >
-            <Phone size={16} aria-hidden /> {site.phoneDisplay}
+            <Phone size={16} aria-hidden /> {info.phoneDisplay}
           </a>
           <Link
             href="/book"

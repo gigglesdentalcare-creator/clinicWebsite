@@ -25,6 +25,24 @@
   --radius-card: 1.75rem;
 }
 
+/* Entrance animation for above-the-fold content. Pure CSS so it starts on first paint
+   (no waiting for JS to hydrate, which would delay the hero headline). Below-the-fold
+   scroll reveals use Motion — see components/motion/Reveal.tsx. */
+@theme {
+  --animate-fade-up: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -40,13 +58,6 @@ h2,
 h3 {
   font-family: var(--font-display), Georgia, serif;
   letter-spacing: -0.01em;
-}
-
-/* Keep room for the sticky mobile CTA bar so it never covers the footer. */
-@media (max-width: 767px) {
-  body {
-    padding-bottom: 4.5rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
