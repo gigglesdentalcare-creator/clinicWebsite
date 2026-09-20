@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "typegen": "sanity schemas extract && sanity typegen generate"
+    "typegen": "sanity schemas extract --force && sanity typegen generate"
   },
   "dependencies": {
     "@sanity/icons": "^5.2.2",

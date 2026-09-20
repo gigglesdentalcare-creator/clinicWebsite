@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Add Next.js foundation: layout shell, design tokens, mobile CTA bar *)",
+      "Bash(node -e \"for \\(const p of ['next-sanity','sanity','@sanity/image-url','@sanity/vision','styled-components']\\) { const j=require\\('./node_modules/'+p+'/package.json'\\); console.log\\(p, j.version\\) }\")",
+      "Bash(node -e \"const j=require\\('./node_modules/next-sanity/package.json'\\); console.log\\(JSON.stringify\\(j.peerDependencies,null,1\\)\\); console.log\\(Object.keys\\(j.exports\\)\\)\")",
+      "Bash(timeout 60 npx sanity projects list)",
+      "Bash(node -e \"const j=require\\('./package.json'\\); console.log\\(JSON.stringify\\(j.exports['./live'],null,1\\)\\); console.log\\(JSON.stringify\\(j.exports['./visual-editing'],null,1\\)\\)\")",
+      "Bash(grep -v \"^\\\\S*-\\\\s*\\\\*\\\\s*$\")",
+      "Bash(grep -v \"^\\\\s*\\\\*\\\\s*$\")",
+      "Bash(node -e \"const j=require\\('sanity/package.json'\\); console.log\\(Object.keys\\(j.exports\\).filter\\(k=>/presentation|structure|cli|^\\\\.$/.test\\(k\\)\\)\\)\")",
+      "Bash(npx sanity *)",
+      "Bash(mkdir -p \"app/\\(site\\)\" app/studio/\\\\[\\\\[...tool\\\\]\\\\] app/api/revalidate app/api/draft-mode/enable app/api/draft-mode/disable sanity/lib sanity/schemaTypes sanity/seed)",
+      "Bash(git mv *)",
+      "Bash(node -e \"const j=require\\('./package.json'\\); console.log\\(j.version, JSON.stringify\\(j.exports['.']||j.exports\\)\\)\")",
+      "Bash(python3 -)",
+      "Bash(export NEXT_PUBLIC_SANITY_PROJECT_ID=dummyproj)",
+      "Bash(timeout 170 npx sanity typegen generate)",
+      "Bash(timeout 170 npx sanity schemas extract)"
+    ]
+  }
+}

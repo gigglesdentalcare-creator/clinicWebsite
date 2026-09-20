@@ -430,13 +430,19 @@ export type AllSanitySchemaTypes =
 
 // Source: sanity/lib/queries.ts
 // Variable: siteSettingsQuery
-// Query: *[_type == "siteSettings"][0]{  name, tagline, phone, whatsapp, email,  addressLine1, city, region, postalCode, mapsUrl, googleReviewUrl,  hours, socialLinks}
+// Query: *[_type == "siteSettings"][0]{  name, tagline, phone, whatsapp, email,  "logo": logo{    alt,    "url": asset->url,    "width": asset->metadata.dimensions.width,    "height": asset->metadata.dimensions.height  },  addressLine1, city, region, postalCode, mapsUrl, googleReviewUrl,  hours, socialLinks}
 export type SiteSettingsQueryResult = {
   name: string | null;
   tagline: string | null;
   phone: string | null;
   whatsapp: string | null;
   email: string | null;
+  logo: {
+    alt: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+  } | null;
   addressLine1: string | null;
   city: string | null;
   region: string | null;
@@ -694,7 +700,7 @@ export type PageBySlugQueryResult = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '*[_type == "siteSettings"][0]{\n  name, tagline, phone, whatsapp, email,\n  addressLine1, city, region, postalCode, mapsUrl, googleReviewUrl,\n  hours, socialLinks\n}': SiteSettingsQueryResult;
+    '*[_type == "siteSettings"][0]{\n  name, tagline, phone, whatsapp, email,\n  "logo": logo{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  },\n  addressLine1, city, region, postalCode, mapsUrl, googleReviewUrl,\n  hours, socialLinks\n}': SiteSettingsQueryResult;
     '*[_type == "homePage"][0]{\n  heroHeadline, heroSubheadline, heroImage, trustStats,\n  featuredTreatments[]->{\n  _id, title, "slug": slug.current, audience, category, summary, image\n},\n  featuredDoctors[]->{ _id, name, "slug": slug.current, qualifications, specialisation, photo },\n  featuredTestimonials[]->{ _id, patientName, quote, rating, source }\n}': HomePageQueryResult;
     '*[_type == "treatment" && defined(slug.current)]\n  | order(order asc, title asc) {\n  _id, title, "slug": slug.current, audience, category, summary, image\n}': TreatmentsQueryResult;
     '*[_type == "treatment" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, audience, category, summary, image, body, faqs, seo,\n  related[]->{\n  _id, title, "slug": slug.current, audience, category, summary, image\n}\n}': TreatmentBySlugQueryResult;

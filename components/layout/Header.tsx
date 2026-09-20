@@ -2,6 +2,7 @@
 
 import { Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
+import { Image } from "next-sanity/image";
 import { useState } from "react";
 import { navLinks, type SiteInfo } from "@/lib/site";
 
@@ -13,9 +14,22 @@ export default function Header({ info }: { info: SiteInfo }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:h-20">
         <Link
           href="/"
-          className="font-display text-xl font-semibold text-ink md:text-2xl"
+          className="flex items-center gap-2.5 font-display text-xl font-semibold text-ink md:text-2xl"
           onClick={() => setOpen(false)}
         >
+          {info.logo && (
+            // Decorative: the clinic name is written out next to it. mix-blend-multiply lets the
+            // logo's white JPEG background melt into the cream header.
+            <Image
+              src={info.logo.url}
+              alt=""
+              width={info.logo.width}
+              height={info.logo.height}
+              sizes="48px"
+              loading="eager"
+              className="h-10 w-auto mix-blend-multiply md:h-12"
+            />
+          )}
           {info.name}
         </Link>
 

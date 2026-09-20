@@ -16,6 +16,7 @@ const defaults: SiteInfo = {
   phoneDisplay: site.phoneDisplay,
   whatsapp: site.whatsapp,
   address: { ...site.address },
+  logo: null,
 };
 
 // Clinic details from the CMS, falling back to lib/site.ts for anything not filled in yet
@@ -42,6 +43,15 @@ export async function getSiteInfo(): Promise<SiteInfo> {
         city: data.city ?? defaults.address.city,
         region: data.region ?? defaults.address.region,
       },
+      logo:
+        data.logo?.url && data.logo.width && data.logo.height
+          ? {
+              url: data.logo.url,
+              width: data.logo.width,
+              height: data.logo.height,
+              alt: data.logo.alt ?? data.name ?? defaults.name,
+            }
+          : null,
     };
   } catch (error) {
     console.error("Could not load site settings from Sanity, using defaults.", error);

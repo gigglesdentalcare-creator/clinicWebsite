@@ -24,6 +24,8 @@ export type SiteInfo = {
   phoneDisplay: string;
   whatsapp: string; // digits only, e.g. 919876543210
   address: { line1: string; city: string; region: string };
+  /** Clinic logo from the CMS; null until one is uploaded. */
+  logo: { url: string; width: number; height: number; alt: string } | null;
 };
 
 export const navLinks = [

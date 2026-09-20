@@ -6,6 +6,12 @@ const treatmentCard = /* groq */ `{
 
 export const siteSettingsQuery = defineQuery(`*[_type == "siteSettings"][0]{
   name, tagline, phone, whatsapp, email,
+  "logo": logo{
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
+  },
   addressLine1, city, region, postalCode, mapsUrl, googleReviewUrl,
   hours, socialLinks
 }`);
