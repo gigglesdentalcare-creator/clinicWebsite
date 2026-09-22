@@ -4,11 +4,12 @@ import type { Variants } from "motion/react";
 import * as m from "motion/react-m";
 import type { ReactNode } from "react";
 
-// Scroll-triggered fade-up. Each element animates once, shortly before it enters the
-// viewport. Content is server-rendered hidden, so the no-JS fallback in
+// Scroll-triggered fade-up. Elements fade in as they enter the viewport and fade out again
+// when they leave it, so the animation replays on every scroll (set `once: true` to play it
+// only the first time). Content is server-rendered hidden, so the no-JS fallback in
 // app/(site)/layout.tsx targets [data-reveal].
 const ease = [0.22, 1, 0.36, 1] as const;
-const viewport = { once: true, margin: "0px 0px -80px 0px" } as const;
+const viewport = { once: false, margin: "0px 0px -80px 0px" } as const;
 
 type RevealProps = {
   children: ReactNode;

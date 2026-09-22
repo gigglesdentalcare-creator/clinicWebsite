@@ -7,7 +7,7 @@ function assertValue<T>(value: T | undefined, message: string): T {
 
 export const projectId = assertValue(
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  "Missing NEXT_PUBLIC_SANITY_PROJECT_ID — copy .env.example to .env.local and add your Sanity project ID.",
+  "Missing NEXT_PUBLIC_SANITY_PROJECT_ID — locally, copy .env.example to .env.local and add your Sanity project ID; on Vercel, add it under Project Settings → Environment Variables (Production and Preview) and redeploy.",
 );
 
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";

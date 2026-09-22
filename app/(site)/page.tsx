@@ -12,11 +12,13 @@ export default async function Home() {
     <>
       {/* Hero: CSS entrance animation (starts on first paint, staggered by delay). */}
       <section className="mx-auto max-w-6xl px-5 pb-10 pt-14 md:pt-24">
-        <p className="animate-fade-up inline-block rounded-full bg-mint px-4 py-1.5 text-sm font-medium text-primary-dark">
+        {/* bg-primary-soft: a fixed pale-blue "badge", not the adaptive card tones used further
+            down the page — this one is meant to read as a brand sticker in both themes. */}
+        <p className="animate-fade-up inline-block rounded-full bg-primary-soft px-4 py-1.5 text-sm font-medium text-primary-dark">
           Sri Ram Nagar, Kondapur · Hyderabad
         </p>
         <h1 className="animate-fade-up mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] text-ink [animation-delay:120ms] md:text-7xl">
-          Smiles that start with a <span className="text-primary">giggle</span>.
+          Smiles that start with a <span className="text-primary-text">giggle</span>.
         </h1>
         <p className="animate-fade-up mt-6 max-w-xl text-lg leading-relaxed text-muted [animation-delay:240ms]">
           {site.description} From a child&apos;s first check-up to a grandparent&apos;s dentures — one
@@ -29,11 +31,13 @@ export default async function Home() {
           >
             Book an appointment
           </Link>
+          {/* text-navy (not text-ink): bg-accent is a fixed pink in both themes, so its text
+              must stay fixed dark too, or it would turn near-invisible pink-on-pink in dark mode. */}
           <a
             href={whatsappLink(info.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-sun px-7 py-3.5 font-semibold text-ink transition duration-300 hover:-translate-y-0.5 hover:brightness-95"
+            className="rounded-full bg-accent px-7 py-3.5 font-semibold text-navy transition duration-300 hover:-translate-y-0.5 hover:brightness-95"
           >
             Chat on WhatsApp
           </a>

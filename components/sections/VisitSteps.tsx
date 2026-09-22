@@ -18,10 +18,10 @@ const steps = [
 
 export default function VisitSteps() {
   return (
-    <section className="bg-mint/60 py-16 md:py-24">
+    <section className="bg-primary/8 py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Your first visit</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary-text">Your first visit</p>
           <h2 className="mt-3 text-3xl font-semibold text-ink md:text-5xl">
             Simple, calm and unhurried
           </h2>
