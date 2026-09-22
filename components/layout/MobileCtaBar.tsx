@@ -19,7 +19,7 @@ export default function MobileCtaBar({ info }: { info: SiteInfo }) {
         href={whatsappLink(info.whatsapp)}
         target="_blank"
         rel="noopener noreferrer"
-        className={`${base} text-primary-dark`}
+        className={`${base} text-primary-text`}
       >
         <MessageCircle size={20} aria-hidden /> WhatsApp
       </a>

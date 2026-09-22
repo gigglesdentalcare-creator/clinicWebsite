@@ -14,10 +14,11 @@ Website for **Giggles Dental Care**, a family dental clinic in Sri Ram Nagar, Ko
 | Icons | [lucide-react](https://lucide.dev) |
 | Animation | [Motion](https://motion.dev) for scroll reveals (`components/motion/`); CSS keyframes for the above-the-fold entrance; all respect *reduce motion* |
 | CMS | [Sanity](https://www.sanity.io) via `next-sanity` — Studio embedded at `/studio`, GROQ queries, TypeGen types, draft preview |
+| Analytics | [Vercel Web Analytics](https://vercel.com/docs/analytics) — visitor traffic to the public site (not `/studio`); see [Analytics](#analytics) |
 | Linting | ESLint (`eslint-config-next`) |
 | Hosting | [Vercel](https://vercel.com) |
 
-**Planned** (see the technical plan): Zod + Resend + Cloudflare Turnstile for the enquiry form, Vercel Analytics.
+**Planned** (see the technical plan): Zod + Resend + Cloudflare Turnstile for the enquiry form.
 
 ## Run locally
 
@@ -153,6 +154,17 @@ Until the clinic fills in **Clinic details & settings** in the Studio, the site 
 2. Add the environment variables from `.env.example` under **Project → Settings → Environment Variables**.
 3. Every push to `main` deploys to production; every pull request gets its own preview URL.
 4. Add the custom domain under **Project → Settings → Domains**.
+
+## Analytics
+
+Page-view traffic is tracked with [Vercel Web Analytics](https://vercel.com/docs/analytics) (the `<Analytics />` component in [app/(site)/layout.tsx](<app/(site)/layout.tsx>)). It only tracks the public site — not `/studio`, so clinic staff logging in to the CMS don't skew the numbers.
+
+1. In the Vercel dashboard, open the project → **Analytics** tab → **Enable**. Nothing else to configure; the component is already in the code.
+2. Data only appears for **deployed** traffic (production and preview URLs) — it does **not** track `npm run dev` on localhost or in Codespaces, so you won't see anything while developing locally.
+3. Once enabled and deployed, the **Analytics** tab shows visitors, page views, top pages, referrers (where traffic came from — Google, direct, social, etc.), and devices, usually within a few minutes of the first real visit.
+4. The free (Hobby) plan keeps 30 days of data; Pro extends that. No cookies or personal data are collected, so no cookie-consent banner is needed for this alone.
+
+For deeper detail (which treatments people view, whether they use Call vs. WhatsApp vs. the booking form, session recordings), a **Google Analytics 4** property or a privacy-focused tool like Plausible/Fathom can be added later — ask if you want one wired in.
 
 ## Roadmap
 

@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
@@ -18,7 +19,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       </noscript>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-navy focus:px-4 focus:py-2 focus:text-white"
       >
         Skip to content
       </a>
@@ -35,6 +36,9 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
           refreshed by the webhook in app/api/revalidate instead. */}
       {(isDraftMode || process.env.NODE_ENV === "development") && <SanityLive />}
       {isDraftMode && <VisualEditing />}
+      {/* Tracks visitor page views (see vercel.com/docs/analytics). Scoped to the public site,
+          not the root layout, so staff logging in to /studio don't count as site traffic. */}
+      <Analytics />
     </div>
   );
 }

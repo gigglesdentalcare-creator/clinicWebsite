@@ -6,7 +6,9 @@ import { navLinks, type SiteInfo } from "@/lib/site";
 
 export default function Footer({ info }: { info: SiteInfo }) {
   return (
-    <footer className="mt-24 bg-ink text-white/80">
+    // bg-navy (not the adaptive bg-ink): the footer stays a dark band in both light and dark
+    // mode — it should not flip to a light background when the site theme is dark.
+    <footer className="mt-24 bg-navy text-white/80">
       <RevealGroup className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-3">
         <RevealItem>
           {info.logo && (
@@ -28,7 +30,7 @@ export default function Footer({ info }: { info: SiteInfo }) {
 
         <RevealItem>
         <nav aria-label="Footer">
-          <p className="text-sm font-semibold uppercase tracking-wider text-sun">Explore</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-accent">Explore</p>
           <ul className="mt-4 space-y-2 text-sm">
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -42,7 +44,7 @@ export default function Footer({ info }: { info: SiteInfo }) {
         </RevealItem>
 
         <RevealItem>
-          <p className="text-sm font-semibold uppercase tracking-wider text-sun">Visit us</p>
+          <p className="text-sm font-semibold uppercase tracking-wider text-accent">Visit us</p>
           <address className="mt-4 space-y-3 text-sm not-italic">
             <p className="flex gap-2">
               <MapPin size={18} className="mt-0.5 shrink-0" aria-hidden />
