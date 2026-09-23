@@ -2,6 +2,7 @@ import { MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { Image } from "next-sanity/image";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import SocialLinks from "@/components/social/SocialLinks";
 import { navLinks, type SiteInfo } from "@/lib/site";
 
 export default function Footer({ info }: { info: SiteInfo }) {
@@ -57,10 +58,23 @@ export default function Footer({ info }: { info: SiteInfo }) {
               </a>
             </p>
           </address>
+          <SocialLinks info={info} tone="dark" className="mt-5" />
         </RevealItem>
       </RevealGroup>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/60">
-        © {new Date().getFullYear()} {info.name}. All rights reserved.
+        <p>© {new Date().getFullYear()} {info.name}. All rights reserved.</p>
+        <p className="mt-1">
+          Site developed and maintained by{" "}
+          <a
+            href="https://github.com/anand404ankit"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white"
+          >
+            Ankit Anand
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );

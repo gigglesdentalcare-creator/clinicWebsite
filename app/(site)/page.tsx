@@ -1,51 +1,35 @@
-import Link from "next/link";
 import AudienceSection from "@/components/sections/AudienceSection";
+import Hero from "@/components/sections/Hero";
+import type { HeroVideoSource } from "@/components/sections/HeroVideo";
+import SocialSection from "@/components/sections/SocialSection";
 import VisitSteps from "@/components/sections/VisitSteps";
-import { site, whatsappLink } from "@/lib/site";
 import { getSiteInfo } from "@/lib/site-info";
+import { fetchContent } from "@/sanity/lib/fetch";
+import { heroVideoQuery } from "@/sanity/lib/queries";
+import { tagsFor } from "@/sanity/lib/tags";
+
+// The background video is optional and uploaded in Studio (Home page → Hero background video).
+// No video, or Sanity unreachable, just means the plain hero — never a broken page.
+async function getHeroVideo(): Promise<HeroVideoSource | null> {
+  try {
+    const data = await fetchContent({ query: heroVideoQuery, tags: tagsFor("homePage") });
+    return data?.url ? { url: data.url, mimeType: data.mimeType } : null;
+  } catch (error) {
+    console.error("Could not load the hero video from Sanity.", error);
+    return null;
+  }
+}
 
 // Phase 1–2 placeholder home page. Real sections + CMS-driven content arrive in Phase 3.
 export default async function Home() {
-  const info = await getSiteInfo();
+  const [info, video] = await Promise.all([getSiteInfo(), getHeroVideo()]);
 
   return (
     <>
-      {/* Hero: CSS entrance animation (starts on first paint, staggered by delay). */}
-      <section className="mx-auto max-w-6xl px-5 pb-10 pt-14 md:pt-24">
-        {/* bg-primary-soft: a fixed pale-blue "badge", not the adaptive card tones used further
-            down the page — this one is meant to read as a brand sticker in both themes. */}
-        <p className="animate-fade-up inline-block rounded-full bg-primary-soft px-4 py-1.5 text-sm font-medium text-primary-dark">
-          Sri Ram Nagar, Kondapur · Hyderabad
-        </p>
-        <h1 className="animate-fade-up mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] text-ink [animation-delay:120ms] md:text-7xl">
-          Smile that starts with <span className="text-primary-text">Giggles</span>.
-        </h1>
-        <p className="animate-fade-up mt-6 max-w-xl text-lg leading-relaxed text-muted [animation-delay:240ms]">
-          {site.description} From a child&apos;s first check-up to a grandparent&apos;s dentures — one
-          friendly clinic for the whole family.
-        </p>
-        <div className="animate-fade-up mt-8 flex flex-wrap gap-3 [animation-delay:360ms]">
-          <Link
-            href="/book"
-            className="rounded-full bg-primary px-7 py-3.5 font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-primary-dark"
-          >
-            Book an appointment
-          </Link>
-          {/* text-navy (not text-ink): bg-accent is a fixed pink in both themes, so its text
-              must stay fixed dark too, or it would turn near-invisible pink-on-pink in dark mode. */}
-          <a
-            href={whatsappLink(info.whatsapp)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-accent px-7 py-3.5 font-semibold text-navy transition duration-300 hover:-translate-y-0.5 hover:brightness-95"
-          >
-            Chat on WhatsApp
-          </a>
-        </div>
-      </section>
-
+      <Hero video={video} />
       <AudienceSection />
       <VisitSteps />
+      <SocialSection info={info} />
     </>
   );
 }

@@ -111,18 +111,19 @@ Copy `.env.example` to `.env.local` (git-ignored, never commit it).
    - **Add recommended products** under **Recommended product** — name, image, description and a link to where it's sold; they appear on `/recommendations`, ordered by the `order` field. The page's own title/intro is under **Recommendations page**.
    - **Add the team** under **Doctor** — name, photo and bio show on `/team`; qualifications, specialisation and registration number show too, if filled in.
    - **Add social links** under **Clinic details & settings → Social & reviews** — Instagram and Facebook links show on `/contact` with icons; LinkedIn/X/YouTube show too, with a plain icon since brand icons for those aren't available (see [Known issues](#known-issues)).
+   - **Add a hero background video** under **Home page → Hero background video** — a short (10–20s) looping MP4 (ideally under 8 MB) that plays silently, in black and white and full window width, behind the home page headline. It's optional: remove it to go back to the plain background. Visitors with *reduce motion* turned on never see it play. Only use footage where any patient shown has agreed to appear.
 3. **Draft preview (optional)** — create an API token with the *Viewer* role (Manage → API → Tokens) and set it as `SANITY_API_READ_TOKEN`. Then use the **Presentation** tool in the Studio to preview unpublished changes.
 4. **Live updates in production** — in Manage → API → Webhooks, create a webhook to `https://<your-domain>/api/revalidate` for create/update/delete, projection `{_type}`, with a secret that matches `SANITY_REVALIDATE_SECRET`. Published edits then appear on the next page visit.
 
 ### How published changes reach the site
 
-Content fetched from Sanity is cached until something tells the site it changed, so the site stays fast:
+Content fetched from Sanity is cached so the site stays fast, and refreshed when something tells the site it changed — or, at the latest, about a minute later:
 
 | Where | What refreshes it |
 |---|---|
 | **Development** (localhost / Codespaces) | `<SanityLive />` — with the site open in a browser tab, published changes refresh automatically within seconds. |
 | **Draft preview** (Presentation tool) | `<SanityLive />` plus draft mode, so unpublished edits show too. |
-| **Production** (Vercel) | The webhook above. Without it, production keeps showing the content it first fetched. |
+| **Production** (Vercel) | The webhook above refreshes content immediately. As a safety net, every content page also re-fetches on its own at most every 60 seconds (`sanity/lib/fetch.ts`), so a missed or unconfigured webhook delays changes by about a minute instead of leaving them stale until the next deploy. |
 
 If a published change doesn't show up in development, keep the site open in a tab and publish again (the live connection only sees changes made while it is connected). The webhook route can also be exercised directly: a request without a valid `sanity-webhook-signature` gets `401`, and a correctly signed one returns `200 {"revalidated":"sanity:<type>"}`. A Codespaces port is private by default, so Sanity can't call the webhook there — that's expected; use production or a public tunnel for it.
 
@@ -136,7 +137,7 @@ If a published change doesn't show up in development, keep the site open in a ta
 ```
 app/(site)/                  Public website routes + layout (header, footer, mobile CTA bar)
 app/(site)/recommendations/  /recommendations — CMS-driven, a template for Phase 3's other pages
-app/(site)/team/             /team — doctor profiles (name, photo, bio) from Sanity
+app/(site)/team/             /team — doctor profiles (name, photo, bio) from Sanity, as alternating photo/text rows
 app/(site)/contact/          /contact — address, phone, WhatsApp, email, social links from Sanity
 app/studio/                  Embedded Sanity Studio at /studio
 app/robots.ts, app/sitemap.ts  robots.txt / sitemap.xml
@@ -145,8 +146,9 @@ app/api/draft-mode/          Enable/disable draft preview
 components/layout/           Header, Footer, MobileCtaBar
 components/motion/           MotionProvider + Reveal / RevealGroup / RevealItem (scroll animations)
 components/sections/         Home page sections
-components/recommendations/  ProductCard (used by /recommendations)
-components/team/             DoctorCard (used by /team)
+components/recommendations/  ProductRow (used by /recommendations)
+components/team/             DoctorRow (used by /team)
+components/ui/               ReadMore (clamps long text, shows a toggle only when needed)
 components/icons/            Hand-drawn Instagram/Facebook icons — see "Known issues"
 components/seo/              LocalBusinessJsonLd (structured data)
 lib/site.ts                  Fallback clinic details + nav links

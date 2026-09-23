@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import DoctorCard, { type Doctor } from "@/components/team/DoctorCard";
+import DoctorRow, { type Doctor } from "@/components/team/DoctorRow";
 import { Reveal, RevealGroup } from "@/components/motion/Reveal";
 import { site } from "@/lib/site";
-import { sanityFetch } from "@/sanity/lib/live";
+import { fetchContent } from "@/sanity/lib/fetch";
 import { doctorsQuery } from "@/sanity/lib/queries";
 import { tagsFor } from "@/sanity/lib/tags";
 import type { DoctorsQueryResult } from "@/sanity.types";
@@ -21,7 +21,7 @@ function hasName(doctor: DoctorsQueryResult[number]): doctor is Doctor {
 
 async function getDoctors(): Promise<Doctor[]> {
   try {
-    const { data } = await sanityFetch({ query: doctorsQuery, tags: tagsFor("doctor"), stega: false });
+    const data = await fetchContent({ query: doctorsQuery, tags: tagsFor("doctor") });
     return (data ?? []).filter(hasName);
   } catch (error) {
     console.error("Could not load the team from Sanity.", error);
@@ -46,11 +46,14 @@ export default async function TeamPage() {
 
       <section className="mx-auto max-w-6xl px-5 pb-20 md:pb-28">
         {doctors.length > 0 ? (
-          <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {doctors.map((doctor) => (
-              <DoctorCard key={doctor._id} doctor={doctor} />
+          // Rows alternate: photo left / details right, then the reverse, and so on.
+          <div className="flex flex-col gap-16 md:gap-24">
+            {doctors.map((doctor, index) => (
+              <RevealGroup key={doctor._id}>
+                <DoctorRow doctor={doctor} reverse={index % 2 === 1} />
+              </RevealGroup>
             ))}
-          </RevealGroup>
+          </div>
         ) : (
           // Editors haven't added any doctors in Studio yet.
           <p className="rounded-card bg-primary/5 p-8 text-center text-muted">

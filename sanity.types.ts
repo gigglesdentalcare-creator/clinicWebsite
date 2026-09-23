@@ -228,6 +228,13 @@ export type Treatment = {
   seo?: Seo;
 };
 
+export type SanityFileAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
+
 export type TestimonialReference = {
   _ref: string;
   _type: "reference";
@@ -244,6 +251,11 @@ export type HomePage = {
   heroHeadline?: string;
   heroSubheadline?: string;
   heroImage?: ImageWithAlt;
+  heroVideo?: {
+    asset?: SanityFileAssetReference;
+    media?: unknown;
+    _type: "file";
+  };
   trustStats?: Array<{
     value?: string;
     label?: string;
@@ -440,6 +452,7 @@ export type AllSanitySchemaTypes =
   | Testimonial
   | Doctor
   | Treatment
+  | SanityFileAssetReference
   | TestimonialReference
   | HomePage
   | SiteSettings
@@ -729,6 +742,14 @@ export type PageBySlugQueryResult = {
 } | null;
 
 // Source: sanity/lib/queries.ts
+// Variable: heroVideoQuery
+// Query: *[_type == "homePage"][0]{  "url": heroVideo.asset->url,  "mimeType": heroVideo.asset->mimeType}
+export type HeroVideoQueryResult = {
+  url: string | null;
+  mimeType: string | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: recommendationsPageQuery
 // Query: *[_type == "recommendationsPage"][0]{ title, intro }
 export type RecommendationsPageQueryResult = {
@@ -769,6 +790,7 @@ declare global {
     '*[_type == "post" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, excerpt, coverImage, body, publishedAt, seo,\n  "author": author->{ name, qualifications, photo }\n}': PostBySlugQueryResult;
     '*[_type == "post" && defined(slug.current)]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[_type == "page" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, body, seo\n}': PageBySlugQueryResult;
+    '*[_type == "homePage"][0]{\n  "url": heroVideo.asset->url,\n  "mimeType": heroVideo.asset->mimeType\n}': HeroVideoQueryResult;
     '*[_type == "recommendationsPage"][0]{ title, intro }': RecommendationsPageQueryResult;
     '*[_type == "recommendedProduct"] | order(order asc, name asc){\n  _id, name, brand, description, link,\n  "image": image{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  }\n}': RecommendedProductsQueryResult;
   }
