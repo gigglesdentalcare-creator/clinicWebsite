@@ -1,4 +1,4 @@
-import { sanityFetch } from "@/sanity/lib/live";
+import { fetchContent } from "@/sanity/lib/fetch";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import { tagsFor } from "@/sanity/lib/tags";
 import { site, type SiteInfo, type SocialLink } from "./site";
@@ -35,11 +35,7 @@ const defaults: SiteInfo = {
 // (or if Sanity can't be reached), so a CMS hiccup never breaks the whole site.
 export async function getSiteInfo(): Promise<SiteInfo> {
   try {
-    const { data } = await sanityFetch({
-      query: siteSettingsQuery,
-      tags: tagsFor("siteSettings"),
-      stega: false, // values feed href/tel links, so keep them free of stega characters
-    });
+    const data = await fetchContent({ query: siteSettingsQuery, tags: tagsFor("siteSettings") });
     if (!data) return defaults;
 
     const phoneDigits = data.phone ? normaliseNumber(data.phone) : "";

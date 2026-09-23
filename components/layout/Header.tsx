@@ -15,7 +15,7 @@ export default function Header({ info }: { info: SiteInfo }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:h-20">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-display text-xl font-semibold text-ink md:text-2xl"
+          className="flex items-center gap-2.5 font-display text-xl font-semibold text-ink md:whitespace-nowrap md:text-2xl"
           onClick={() => setOpen(false)}
         >
           {info.logo && (
@@ -37,7 +37,7 @@ export default function Header({ info }: { info: SiteInfo }) {
           {info.name}
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-6 whitespace-nowrap xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -52,20 +52,20 @@ export default function Header({ info }: { info: SiteInfo }) {
         <div className="flex items-center gap-2">
           <a
             href={`tel:${info.phone}`}
-            className="hidden items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-ink hover:bg-primary/10 lg:inline-flex"
+            className="hidden items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-ink hover:bg-primary/10 2xl:inline-flex"
           >
             <Phone size={16} aria-hidden /> {info.phoneDisplay}
           </a>
           <Link
             href="/book"
-            className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark md:inline-flex"
+            className="hidden whitespace-nowrap rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark md:inline-flex"
           >
             Book appointment
           </Link>
           <ThemeToggle />
           <button
             type="button"
-            className="inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-primary/10 md:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-primary/10 xl:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -80,7 +80,7 @@ export default function Header({ info }: { info: SiteInfo }) {
         <nav
           id="mobile-menu"
           aria-label="Mobile"
-          className="border-t border-ink/5 bg-background px-5 pb-6 pt-2 md:hidden"
+          className="border-t border-ink/5 bg-background px-5 pb-6 pt-2 xl:hidden"
         >
           <ul className="flex flex-col">
             {navLinks.map((link) => (
