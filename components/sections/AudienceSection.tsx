@@ -16,7 +16,7 @@ const audiences = [
   {
     title: "Adults",
     icon: User,
-    body: "Check-ups, fillings, root canals, braces, whitening and more, for every stage of life.",
+    body: "Implants, smile designing, aligners, braces, root canal treatments, crowns and bridges, whitening and more.",
     href: "/treatments",
     tone: "bg-primary/10", // logo blue
   },

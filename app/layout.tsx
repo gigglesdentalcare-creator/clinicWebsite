@@ -14,13 +14,32 @@ const fraunces = Fraunces({
   subsets: ["latin"],
 });
 
+const title = {
+  default: `${site.name} — Family Dentist in Kondapur, Hyderabad`,
+  template: `%s | ${site.name}`,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — Family Dentist in Kondapur, Hyderabad`,
-    template: `%s | ${site.name}`,
-  },
+  title,
   description: site.description,
+  alternates: { canonical: "/" },
+  // No custom `images` yet — there's no real clinic photography to use for a social-share
+  // preview. Add one (a photo, or a generated card via next/og) once there is; until then
+  // WhatsApp/social previews fall back to the page title and description only.
+  openGraph: {
+    title,
+    description: site.description,
+    url: site.url,
+    siteName: site.name,
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title,
+    description: site.description,
+  },
 };
 
 export const viewport: Viewport = {

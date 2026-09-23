@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import MobileCtaBar from "@/components/layout/MobileCtaBar";
 import MotionProvider from "@/components/motion/MotionProvider";
+import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { getSiteInfo } from "@/lib/site-info";
 import { SanityLive } from "@/sanity/lib/live";
 
@@ -23,6 +24,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       >
         Skip to content
       </a>
+      <LocalBusinessJsonLd info={info} />
       <Header info={info} />
       <MotionProvider>
         <main id="main" className="flex-1">

@@ -17,13 +17,22 @@ export const site = {
   },
 } as const;
 
+export type SocialLink = { platform: "Facebook" | "Instagram" | "LinkedIn" | "X" | "YouTube"; url: string };
+export type DayHours = { day: string; closed: boolean; opens?: string; closes?: string };
+
 export type SiteInfo = {
   name: string;
   tagline: string;
   phone: string; // tel: format, e.g. +919876543210
   phoneDisplay: string;
   whatsapp: string; // digits only, e.g. 919876543210
-  address: { line1: string; city: string; region: string };
+  /** Not shown/linked anywhere until the clinic adds one in Studio. */
+  email: string | null;
+  address: { line1: string; city: string; region: string; postalCode: string | null };
+  /** Google Maps link from Studio; falls back to a maps search built from the address. */
+  mapsUrl: string;
+  hours: DayHours[];
+  socialLinks: SocialLink[];
   /** Clinic logo from the CMS; null until one is uploaded. */
   logo: { url: string; width: number; height: number; alt: string } | null;
 };
@@ -33,6 +42,7 @@ export const navLinks = [
   { href: "/kids-dentistry", label: "Kids" },
   { href: "/team", label: "Our Team" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/recommendations", label: "Recommendations" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ] as const;

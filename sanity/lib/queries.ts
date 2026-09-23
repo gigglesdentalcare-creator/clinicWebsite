@@ -34,7 +34,13 @@ export const treatmentBySlugQuery = defineQuery(`*[_type == "treatment" && slug.
 export const treatmentSlugsQuery = defineQuery(`*[_type == "treatment" && defined(slug.current)]{ "slug": slug.current }`);
 
 export const doctorsQuery = defineQuery(`*[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){
-  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, photo, bio
+  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, bio,
+  "photo": photo{
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
+  }
 }`);
 
 export const faqsQuery = defineQuery(`*[_type == "faq"] | order(order asc){ _id, question, answer, group }`);
@@ -60,4 +66,16 @@ export const postSlugsQuery = defineQuery(`*[_type == "post" && defined(slug.cur
 
 export const pageBySlugQuery = defineQuery(`*[_type == "page" && slug.current == $slug][0]{
   _id, title, "slug": slug.current, body, seo
+}`);
+
+export const recommendationsPageQuery = defineQuery(`*[_type == "recommendationsPage"][0]{ title, intro }`);
+
+export const recommendedProductsQuery = defineQuery(`*[_type == "recommendedProduct"] | order(order asc, name asc){
+  _id, name, brand, description, link,
+  "image": image{
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
+  }
 }`);
