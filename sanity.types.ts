@@ -62,6 +62,30 @@ export type ImageWithAlt = {
   alt?: string;
 };
 
+export type RecommendedProduct = {
+  _id: string;
+  _type: "recommendedProduct";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  brand?: string;
+  image?: ImageWithAlt;
+  description?: string;
+  link?: string;
+  order?: number;
+};
+
+export type RecommendationsPage = {
+  _id: string;
+  _type: "recommendationsPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  intro?: string;
+};
+
 export type Page = {
   _id: string;
   _type: "page";
@@ -404,6 +428,8 @@ export type AllSanitySchemaTypes =
   | BlockContent
   | SanityImageAssetReference
   | ImageWithAlt
+  | RecommendedProduct
+  | RecommendationsPage
   | Page
   | Slug
   | DoctorReference
@@ -697,6 +723,31 @@ export type PageBySlugQueryResult = {
   seo: Seo | null;
 } | null;
 
+// Source: sanity/lib/queries.ts
+// Variable: recommendationsPageQuery
+// Query: *[_type == "recommendationsPage"][0]{ title, intro }
+export type RecommendationsPageQueryResult = {
+  title: string | null;
+  intro: string | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: recommendedProductsQuery
+// Query: *[_type == "recommendedProduct"] | order(order asc, name asc){  _id, name, brand, description, link,  "image": image{    alt,    "url": asset->url,    "width": asset->metadata.dimensions.width,    "height": asset->metadata.dimensions.height  }}
+export type RecommendedProductsQueryResult = Array<{
+  _id: string;
+  name: string | null;
+  brand: string | null;
+  description: string | null;
+  link: string | null;
+  image: {
+    alt: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+  } | null;
+}>;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -713,6 +764,8 @@ declare global {
     '*[_type == "post" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, excerpt, coverImage, body, publishedAt, seo,\n  "author": author->{ name, qualifications, photo }\n}': PostBySlugQueryResult;
     '*[_type == "post" && defined(slug.current)]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[_type == "page" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, body, seo\n}': PageBySlugQueryResult;
+    '*[_type == "recommendationsPage"][0]{ title, intro }': RecommendationsPageQueryResult;
+    '*[_type == "recommendedProduct"] | order(order asc, name asc){\n  _id, name, brand, description, link,\n  "image": image{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  }\n}': RecommendedProductsQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

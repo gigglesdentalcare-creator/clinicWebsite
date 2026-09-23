@@ -14,6 +14,10 @@ export const structure: StructureResolver = (S) =>
         .title("Home page")
         .id("homePage")
         .child(S.document().schemaType("homePage").documentId("homePage")),
+      S.listItem()
+        .title("Recommendations page")
+        .id("recommendationsPage")
+        .child(S.document().schemaType("recommendationsPage").documentId("recommendationsPage")),
       S.divider(),
       ...S.documentTypeListItems().filter((item) => !singletonTypes.includes(item.getId() ?? "")),
     ]);

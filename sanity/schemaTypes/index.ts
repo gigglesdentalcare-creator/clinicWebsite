@@ -6,6 +6,8 @@ import { homePage } from "./homePage";
 import { blockContent, imageWithAlt, seo } from "./objects";
 import { page } from "./page";
 import { post } from "./post";
+import { recommendationsPage } from "./recommendationsPage";
+import { recommendedProduct } from "./recommendedProduct";
 import { siteSettings } from "./siteSettings";
 import { testimonial } from "./testimonial";
 import { treatment } from "./treatment";
@@ -21,6 +23,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   faq,
   post,
   page,
+  recommendationsPage,
+  recommendedProduct,
   // shared objects
   imageWithAlt,
   blockContent,
@@ -28,4 +32,4 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 ];
 
 // Documents that exist exactly once. Studio shows them as single items (see structure.ts).
-export const singletonTypes = ["siteSettings", "homePage"];
+export const singletonTypes = ["siteSettings", "homePage", "recommendationsPage"];

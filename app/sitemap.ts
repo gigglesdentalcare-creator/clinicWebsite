@@ -1,16 +1,13 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 
-// Only the home page exists today. Phase 3 adds routes like /treatments/[slug] and
-// /blog/[slug] — extend this by mapping their slug queries (sanity/lib/queries.ts) into
-// more entries here, the same way treatmentSlugsQuery / postSlugsQuery are meant to be used.
+// Static routes today. Phase 3 adds dynamic ones like /treatments/[slug] and /blog/[slug] —
+// extend this by mapping their slug queries (sanity/lib/queries.ts) into more entries here,
+// the same way treatmentSlugsQuery / postSlugsQuery are meant to be used.
 export default function sitemap(): MetadataRoute.Sitemap {
+  const lastModified = new Date();
   return [
-    {
-      url: site.url,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
+    { url: site.url, lastModified, changeFrequency: "weekly", priority: 1 },
+    { url: `${site.url}/recommendations`, lastModified, changeFrequency: "monthly", priority: 0.6 },
   ];
 }

@@ -108,6 +108,7 @@ Copy `.env.example` to `.env.local` (git-ignored, never commit it).
 
 1. **Allow the site in Sanity** (also covered in the run steps above) — at <https://www.sanity.io/manage> → your project → **API → CORS origins**, add the exact URL you open the site from (tick *Allow credentials*): `http://localhost:3000` locally, or your Codespaces URL such as `https://<codespace-name>-3000.app.github.dev`. Add your Vercel and production domains the same way later. Don't use a wildcard like `https://*.app.github.dev` — that would let other people's Codespaces make credentialed requests to your project.
 2. **Log in to the Studio** at `/studio` and fill in **Clinic details & settings** — the phone/WhatsApp numbers there replace the placeholders in [lib/site.ts](lib/site.ts) across the site.
+   - **Add recommended products** under **Recommended product** — name, image, description and a link to where it's sold; they appear on `/recommendations`, ordered by the `order` field. The page's own title/intro is under **Recommendations page**.
 3. **Draft preview (optional)** — create an API token with the *Viewer* role (Manage → API → Tokens) and set it as `SANITY_API_READ_TOKEN`. Then use the **Presentation** tool in the Studio to preview unpublished changes.
 4. **Live updates in production** — in Manage → API → Webhooks, create a webhook to `https://<your-domain>/api/revalidate` for create/update/delete, projection `{_type}`, with a secret that matches `SANITY_REVALIDATE_SECRET`. Published edits then appear on the next page visit.
 
@@ -130,20 +131,24 @@ If a published change doesn't show up in development, keep the site open in a ta
 ## Project structure
 
 ```
-app/(site)/              Public website routes + layout (header, footer, mobile CTA bar)
-app/studio/              Embedded Sanity Studio at /studio
-app/api/revalidate/      Sanity webhook → cache revalidation
-app/api/draft-mode/      Enable/disable draft preview
-components/layout/       Header, Footer, MobileCtaBar
-components/motion/       MotionProvider + Reveal / RevealGroup / RevealItem (scroll animations)
-components/sections/     Home page sections
-lib/site.ts              Fallback clinic details + nav links
-lib/site-info.ts         Clinic details from the CMS, falling back to lib/site.ts
-sanity/schemaTypes/      Content models (treatments, doctors, testimonials, gallery, FAQs, blog, pages…)
-sanity/lib/              Sanity client, live fetch helper, GROQ queries, image URLs, cache tags
-sanity.config.ts         Studio configuration
-sanity.types.ts          Generated types (do not edit by hand)
-public/                  Static assets
+app/(site)/                  Public website routes + layout (header, footer, mobile CTA bar)
+app/(site)/recommendations/  /recommendations — CMS-driven, a template for Phase 3's other pages
+app/studio/                  Embedded Sanity Studio at /studio
+app/robots.ts, app/sitemap.ts  robots.txt / sitemap.xml
+app/api/revalidate/          Sanity webhook → cache revalidation
+app/api/draft-mode/          Enable/disable draft preview
+components/layout/           Header, Footer, MobileCtaBar
+components/motion/           MotionProvider + Reveal / RevealGroup / RevealItem (scroll animations)
+components/sections/         Home page sections
+components/recommendations/  ProductCard (used by /recommendations)
+components/seo/              LocalBusinessJsonLd (structured data)
+lib/site.ts                  Fallback clinic details + nav links
+lib/site-info.ts             Clinic details from the CMS, falling back to lib/site.ts
+sanity/schemaTypes/          Content models (treatments, doctors, testimonials, gallery, FAQs, blog, pages, recommended products…)
+sanity/lib/                  Sanity client, live fetch helper, GROQ queries, image URLs, cache tags
+sanity.config.ts             Studio configuration
+sanity.types.ts              Generated types (do not edit by hand)
+public/                      Static assets
 ```
 
 Until the clinic fills in **Clinic details & settings** in the Studio, the site shows **placeholder** phone/WhatsApp numbers from [lib/site.ts](lib/site.ts) — replace them before going live.
@@ -170,7 +175,7 @@ For deeper detail (which treatments people view, whether they use Call vs. Whats
 
 1. **Foundation** — scaffold, design tokens, layout shell *(done)*
 2. **CMS** — Sanity schemas, embedded Studio, revalidation webhook, draft preview *(in progress — seed content still to do)*
-3. **Pages** — Home sections, Treatments (Kids / Adults filter), Kids Dentistry, Team, Gallery, Contact
+3. **Pages** — Home sections, Treatments (Kids / Adults filter), Kids Dentistry, Team, Gallery, Contact, Recommendations *(Recommendations done — see [CMS setup](#cms-sanity-setup) to add products)*
 4. **Conversion** — `/book` enquiry form (email + spam protection), WhatsApp/call CTAs, analytics
 5. **SEO & QA** — structured data (`Dentist` JSON-LD), sitemap, OG images, Lighthouse/accessibility pass
 6. **Launch** — custom domain, Google Business Profile, staff handover guide

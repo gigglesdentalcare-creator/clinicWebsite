@@ -61,3 +61,15 @@ export const postSlugsQuery = defineQuery(`*[_type == "post" && defined(slug.cur
 export const pageBySlugQuery = defineQuery(`*[_type == "page" && slug.current == $slug][0]{
   _id, title, "slug": slug.current, body, seo
 }`);
+
+export const recommendationsPageQuery = defineQuery(`*[_type == "recommendationsPage"][0]{ title, intro }`);
+
+export const recommendedProductsQuery = defineQuery(`*[_type == "recommendedProduct"] | order(order asc, name asc){
+  _id, name, brand, description, link,
+  "image": image{
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
+  }
+}`);
