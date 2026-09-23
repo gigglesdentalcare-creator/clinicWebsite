@@ -34,7 +34,13 @@ export const treatmentBySlugQuery = defineQuery(`*[_type == "treatment" && slug.
 export const treatmentSlugsQuery = defineQuery(`*[_type == "treatment" && defined(slug.current)]{ "slug": slug.current }`);
 
 export const doctorsQuery = defineQuery(`*[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){
-  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, photo, bio
+  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, bio,
+  "photo": photo{
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height
+  }
 }`);
 
 export const faqsQuery = defineQuery(`*[_type == "faq"] | order(order asc){ _id, question, answer, group }`);

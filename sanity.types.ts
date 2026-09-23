@@ -625,7 +625,7 @@ export type TreatmentSlugsQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: doctorsQuery
-// Query: *[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, photo, bio}
+// Query: *[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, bio,  "photo": photo{    alt,    "url": asset->url,    "width": asset->metadata.dimensions.width,    "height": asset->metadata.dimensions.height  }}
 export type DoctorsQueryResult = Array<{
   _id: string;
   name: string | null;
@@ -633,8 +633,13 @@ export type DoctorsQueryResult = Array<{
   qualifications: string | null;
   specialisation: string | null;
   registrationNumber: string | null;
-  photo: ImageWithAlt | null;
   bio: BlockContent | null;
+  photo: {
+    alt: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+  } | null;
 }>;
 
 // Source: sanity/lib/queries.ts
@@ -756,7 +761,7 @@ declare global {
     '*[_type == "treatment" && defined(slug.current)]\n  | order(order asc, title asc) {\n  _id, title, "slug": slug.current, audience, category, summary, image\n}': TreatmentsQueryResult;
     '*[_type == "treatment" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, audience, category, summary, image, body, faqs, seo,\n  related[]->{\n  _id, title, "slug": slug.current, audience, category, summary, image\n}\n}': TreatmentBySlugQueryResult;
     '*[_type == "treatment" && defined(slug.current)]{ "slug": slug.current }': TreatmentSlugsQueryResult;
-    '*[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){\n  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, photo, bio\n}': DoctorsQueryResult;
+    '*[_type == "doctor" && defined(slug.current)] | order(order asc, name asc){\n  _id, name, "slug": slug.current, qualifications, specialisation, registrationNumber, bio,\n  "photo": photo{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  }\n}': DoctorsQueryResult;
     '*[_type == "faq"] | order(order asc){ _id, question, answer, group }': FaqsQueryResult;
     '*[_type == "testimonial" && consent == true]\n  | order(_createdAt desc){ _id, patientName, quote, rating, source, "treatment": treatment->title }': TestimonialsQueryResult;
     '*[_type == "galleryItem" && (kind != "beforeAfter" || consent == true)]\n  | order(_createdAt desc){\n    _id, title, kind, image, beforeImage, afterImage, caption, "treatment": treatment->title\n  }': GalleryQueryResult;
