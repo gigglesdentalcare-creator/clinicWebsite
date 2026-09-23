@@ -11,6 +11,14 @@ export const homePage = defineType({
     defineField({ name: "heroSubheadline", type: "text", rows: 3 }),
     defineField({ name: "heroImage", type: "imageWithAlt", description: "Ideally a photo showing both a child and an adult." }),
     defineField({
+      name: "heroVideo",
+      title: "Hero background video",
+      type: "file",
+      options: { accept: "video/mp4,video/webm" },
+      description:
+        "Plays silently, in black and white, behind the home page headline. Use a short (10–20 second) looping clip, ideally under 8 MB — MP4 (H.264) plays everywhere. Only use footage where any patient shown has agreed to appear. Remove it to go back to the plain background.",
+    }),
+    defineField({
       name: "trustStats",
       title: "Trust strip",
       type: "array",

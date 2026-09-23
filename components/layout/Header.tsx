@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Phone, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Image } from "next-sanity/image";
 import { useState } from "react";
@@ -38,7 +38,8 @@ export default function Header({ info }: { info: SiteInfo }) {
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-6 whitespace-nowrap xl:flex">
-          {navLinks.map((link) => (
+          {/* Contact is left out here: it gets the highlighted button on the right instead. */}
+          {navLinks.filter((link) => link.href !== "/contact").map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -50,17 +51,11 @@ export default function Header({ info }: { info: SiteInfo }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href={`tel:${info.phone}`}
-            className="hidden items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-ink hover:bg-primary/10 2xl:inline-flex"
-          >
-            <Phone size={16} aria-hidden /> {info.phoneDisplay}
-          </a>
           <Link
-            href="/book"
+            href="/contact"
             className="hidden whitespace-nowrap rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark md:inline-flex"
           >
-            Book appointment
+            Contact Us
           </Link>
           <ThemeToggle />
           <button
