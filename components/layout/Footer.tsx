@@ -2,6 +2,7 @@ import { MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { Image } from "next-sanity/image";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import SocialLinks from "@/components/social/SocialLinks";
 import { navLinks, type SiteInfo } from "@/lib/site";
 
 export default function Footer({ info }: { info: SiteInfo }) {
@@ -57,6 +58,7 @@ export default function Footer({ info }: { info: SiteInfo }) {
               </a>
             </p>
           </address>
+          <SocialLinks info={info} tone="dark" className="mt-5" />
         </RevealItem>
       </RevealGroup>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/60">

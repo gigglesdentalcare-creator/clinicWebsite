@@ -31,6 +31,8 @@ export type SiteInfo = {
   address: { line1: string; city: string; region: string; postalCode: string | null };
   /** Google Maps link from Studio; falls back to a maps search built from the address. */
   mapsUrl: string;
+  /** Google Maps embed (no API key needed) searched by clinic name + address, for an <iframe>. */
+  mapEmbedUrl: string;
   hours: DayHours[];
   socialLinks: SocialLink[];
   /** Clinic logo from the CMS; null until one is uploaded. */

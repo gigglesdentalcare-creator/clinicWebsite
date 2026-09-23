@@ -1,27 +1,14 @@
 import { Clock, Link2, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { FacebookIcon, InstagramIcon } from "@/components/icons/SocialIcons";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
-import { site, whatsappLink, type SocialLink } from "@/lib/site";
+import SocialLinks from "@/components/social/SocialLinks";
+import { site, whatsappLink } from "@/lib/site";
 import { getSiteInfo } from "@/lib/site-info";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description: `Call, WhatsApp, email or visit ${site.name} in ${site.address.city}.`,
-};
-
-type SocialIconComponent = (props: { size?: number; className?: string }) => ReactNode;
-
-const socialIcons: Record<SocialLink["platform"], SocialIconComponent> = {
-  Instagram: InstagramIcon,
-  Facebook: FacebookIcon,
-  // lucide dropped brand icons for these platforms; a generic "link" icon still gets the point
-  // across, since each one is shown with its platform name as well, not the icon alone.
-  LinkedIn: Link2,
-  YouTube: Link2,
-  X: Link2,
 };
 
 export default async function ContactPage() {
@@ -97,37 +84,24 @@ export default async function ContactPage() {
               </div>
             )}
 
-            {info.socialLinks.length > 0 && (
-              <div className="flex gap-4">
-                <span className="mt-0.5 flex size-[22px] shrink-0 items-center justify-center text-primary-text" aria-hidden>
-                  <Link2 size={20} />
-                </span>
-                <div>
-                  <p className="font-semibold text-ink">Follow us</p>
-                  <ul className="mt-2 flex flex-wrap gap-3">
-                    {info.socialLinks.map((link) => {
-                      const Icon = socialIcons[link.platform];
-                      return (
-                        <li key={link.platform}>
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-medium text-ink transition hover:bg-primary/10"
-                          >
-                            <Icon size={16} />
-                            {link.platform}
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+            <div className="flex gap-4">
+              <Link2 size={22} className="mt-0.5 shrink-0 text-primary-text" aria-hidden />
+              <div>
+                <p className="font-semibold text-ink">Find us online</p>
+                <SocialLinks info={info} className="mt-3" />
               </div>
-            )}
+            </div>
           </RevealItem>
 
           <RevealItem className="flex flex-col gap-6 rounded-card bg-ink/5 p-7 md:p-8">
+            <iframe
+              src={info.mapEmbedUrl}
+              title={`Map showing ${info.name}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="min-h-72 w-full flex-1 rounded-2xl border-0 bg-ink/5"
+            />
+
             {info.hours.length > 0 && (
               <div className="flex gap-4">
                 <Clock size={22} className="mt-0.5 shrink-0 text-primary-text" aria-hidden />

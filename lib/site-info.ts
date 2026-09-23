@@ -15,6 +15,13 @@ function mapsSearchUrl(addressParts: Array<string | null | undefined>) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
 
+// Keyless Google Maps embed. Searching by clinic name as well as address lets Google pin the
+// clinic's own business listing rather than just the street.
+function mapEmbedUrl(name: string, addressParts: Array<string | null | undefined>) {
+  const query = [name, ...addressParts].filter(Boolean).join(", ");
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+}
+
 const defaultAddress = { ...site.address, postalCode: null };
 
 const defaults: SiteInfo = {
@@ -26,6 +33,7 @@ const defaults: SiteInfo = {
   email: null,
   address: defaultAddress,
   mapsUrl: mapsSearchUrl(Object.values(defaultAddress)),
+  mapEmbedUrl: mapEmbedUrl(site.name, Object.values(defaultAddress)),
   hours: [],
   socialLinks: [],
   logo: null,
@@ -55,6 +63,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
       email: data.email ?? defaults.email,
       address,
       mapsUrl: data.mapsUrl || mapsSearchUrl(Object.values(address)),
+      mapEmbedUrl: mapEmbedUrl(data.name ?? defaults.name, Object.values(address)),
       hours: (data.hours ?? [])
         .filter((entry): entry is typeof entry & { day: string } => Boolean(entry.day))
         .map((entry) => ({ day: entry.day, closed: entry.closed ?? false, opens: entry.opens, closes: entry.closes })),
