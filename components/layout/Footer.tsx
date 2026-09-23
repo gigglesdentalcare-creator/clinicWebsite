@@ -60,7 +60,19 @@ export default function Footer({ info }: { info: SiteInfo }) {
         </RevealItem>
       </RevealGroup>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/60">
-        © {new Date().getFullYear()} {info.name}. All rights reserved.
+        <p>© {new Date().getFullYear()} {info.name}. All rights reserved.</p>
+        <p className="mt-1">
+          Site developed and maintained by{" "}
+          <a
+            href="https://github.com/anand404ankit"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-white"
+          >
+            Ankit Anand
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );
