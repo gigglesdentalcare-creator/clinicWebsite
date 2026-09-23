@@ -18,7 +18,7 @@ export default async function Home() {
           Sri Ram Nagar, Kondapur · Hyderabad
         </p>
         <h1 className="animate-fade-up mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] text-ink [animation-delay:120ms] md:text-7xl">
-          Smiles that start with a <span className="text-primary-text">giggle</span>.
+          Smile that starts with <span className="text-primary-text">Giggles</span>.
         </h1>
         <p className="animate-fade-up mt-6 max-w-xl text-lg leading-relaxed text-muted [animation-delay:240ms]">
           {site.description} From a child&apos;s first check-up to a grandparent&apos;s dentures — one
