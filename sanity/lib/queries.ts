@@ -68,9 +68,12 @@ export const pageBySlugQuery = defineQuery(`*[_type == "page" && slug.current ==
   _id, title, "slug": slug.current, body, seo
 }`);
 
-export const heroVideoQuery = defineQuery(`*[_type == "homePage"][0]{
-  "url": heroVideo.asset->url,
-  "mimeType": heroVideo.asset->mimeType
+export const heroQuery = defineQuery(`*[_type == "homePage"][0]{
+  "headline": heroHeadline,
+  "highlight": heroHighlight,
+  "subheadline": heroSubheadline,
+  "videoUrl": select(heroVideo.asset->size > 0 => heroVideo.asset->url),
+  "videoMimeType": select(heroVideo.asset->size > 0 => heroVideo.asset->mimeType)
 }`);
 
 export const recommendationsPageQuery =defineQuery(`*[_type == "recommendationsPage"][0]{ title, intro }`);

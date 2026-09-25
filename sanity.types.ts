@@ -249,6 +249,7 @@ export type HomePage = {
   _updatedAt: string;
   _rev: string;
   heroHeadline?: string;
+  heroHighlight?: string;
   heroSubheadline?: string;
   heroImage?: ImageWithAlt;
   heroVideo?: {
@@ -742,11 +743,14 @@ export type PageBySlugQueryResult = {
 } | null;
 
 // Source: sanity/lib/queries.ts
-// Variable: heroVideoQuery
-// Query: *[_type == "homePage"][0]{  "url": heroVideo.asset->url,  "mimeType": heroVideo.asset->mimeType}
-export type HeroVideoQueryResult = {
-  url: string | null;
-  mimeType: string | null;
+// Variable: heroQuery
+// Query: *[_type == "homePage"][0]{  "headline": heroHeadline,  "highlight": heroHighlight,  "subheadline": heroSubheadline,  "videoUrl": select(heroVideo.asset->size > 0 => heroVideo.asset->url),  "videoMimeType": select(heroVideo.asset->size > 0 => heroVideo.asset->mimeType)}
+export type HeroQueryResult = {
+  headline: string | null;
+  highlight: string | null;
+  subheadline: string | null;
+  videoUrl: string | null;
+  videoMimeType: string | null;
 } | null;
 
 // Source: sanity/lib/queries.ts
@@ -790,7 +794,7 @@ declare global {
     '*[_type == "post" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, excerpt, coverImage, body, publishedAt, seo,\n  "author": author->{ name, qualifications, photo }\n}': PostBySlugQueryResult;
     '*[_type == "post" && defined(slug.current)]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[_type == "page" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, body, seo\n}': PageBySlugQueryResult;
-    '*[_type == "homePage"][0]{\n  "url": heroVideo.asset->url,\n  "mimeType": heroVideo.asset->mimeType\n}': HeroVideoQueryResult;
+    '*[_type == "homePage"][0]{\n  "headline": heroHeadline,\n  "highlight": heroHighlight,\n  "subheadline": heroSubheadline,\n  "videoUrl": select(heroVideo.asset->size > 0 => heroVideo.asset->url),\n  "videoMimeType": select(heroVideo.asset->size > 0 => heroVideo.asset->mimeType)\n}': HeroQueryResult;
     '*[_type == "recommendationsPage"][0]{ title, intro }': RecommendationsPageQueryResult;
     '*[_type == "recommendedProduct"] | order(order asc, name asc){\n  _id, name, brand, description, link,\n  "image": image{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  }\n}': RecommendedProductsQueryResult;
   }

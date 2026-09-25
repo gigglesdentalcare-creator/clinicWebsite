@@ -7,8 +7,28 @@ export const homePage = defineType({
   type: "document",
   icon: HomeIcon,
   fields: [
-    defineField({ name: "heroHeadline", type: "string", initialValue: "Smiles that start with a giggle.", validation: (r) => r.required() }),
-    defineField({ name: "heroSubheadline", type: "text", rows: 3 }),
+    defineField({
+      name: "heroHeadline",
+      title: "Headline",
+      type: "string",
+      description: "The big line at the top of the home page. Shown exactly as typed.",
+      initialValue: "Smiles that start with Giggles",
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: "heroHighlight",
+      title: "Highlighted word",
+      type: "string",
+      description: "A word or phrase from the headline to show in blue, e.g. Giggles. Leave empty for none.",
+      initialValue: "Giggles",
+    }),
+    defineField({
+      name: "heroSubheadline",
+      title: "Subheadline",
+      type: "text",
+      rows: 3,
+      description: "The paragraph under the headline. Leave empty to use the default text.",
+    }),
     defineField({ name: "heroImage", type: "imageWithAlt", description: "Ideally a photo showing both a child and an adult." }),
     defineField({
       name: "heroVideo",
