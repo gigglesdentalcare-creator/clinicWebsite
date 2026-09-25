@@ -2,10 +2,42 @@ import Link from "next/link";
 import { site } from "@/lib/site";
 import HeroVideo, { type HeroVideoSource } from "./HeroVideo";
 
+export type HeroContent = {
+  headline: string;
+  /** Word/phrase from the headline shown in blue; empty for none. */
+  highlight: string;
+  subheadline: string;
+  video: HeroVideoSource | null;
+};
+
+// What the hero shows until the clinic edits the Home page in Studio.
+export const defaultHero: HeroContent = {
+  headline: "Smiles that start with Giggles",
+  highlight: "Giggles",
+  subheadline: `${site.description} From a child's first check-up to a grandparent's dentures — one friendly clinic for the whole family.`,
+  video: null,
+};
+
+// Shows the headline as typed, with the first occurrence of `highlight` (any capitalisation) in
+// blue. If the phrase isn't in the headline there's simply no highlight.
+function renderHeadline(headline: string, highlight: string) {
+  const start = highlight ? headline.toLowerCase().indexOf(highlight.toLowerCase()) : -1;
+  if (start < 0) return headline;
+  const end = start + highlight.length;
+  return (
+    <>
+      {headline.slice(0, start)}
+      <span className="text-primary-text">{headline.slice(start, end)}</span>
+      {headline.slice(end)}
+    </>
+  );
+}
+
 // Home page hero. CSS entrance animation (starts on first paint, staggered by delay). When the
 // clinic has uploaded a background video in Studio it plays behind the whole section, full
 // width; otherwise this is just the plain background.
-export default function Hero({ video }: { video: HeroVideoSource | null }) {
+export default function Hero({ hero }: { hero: HeroContent }) {
+  const { headline, highlight, subheadline, video } = hero;
   return (
     <section className="relative isolate overflow-hidden">
       {video && <HeroVideo video={video} />}
@@ -18,11 +50,10 @@ export default function Hero({ video }: { video: HeroVideoSource | null }) {
           Sri Ram Nagar, Kondapur · Hyderabad
         </p>
         <h1 className="animate-fade-up mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] text-ink [animation-delay:120ms] md:text-7xl">
-          Smile that starts with <span className="text-primary-text">Giggles</span>.
+          {renderHeadline(headline, highlight)}
         </h1>
-        <p className="animate-fade-up mt-6 max-w-xl text-lg leading-relaxed text-muted [animation-delay:240ms]">
-          {site.description} From a child&apos;s first check-up to a grandparent&apos;s dentures — one
-          friendly clinic for the whole family.
+        <p className="animate-fade-up mt-6 max-w-xl whitespace-pre-line text-lg leading-relaxed text-muted [animation-delay:240ms]">
+          {subheadline}
         </p>
         <div className="animate-fade-up mt-8 flex flex-wrap gap-3 [animation-delay:360ms]">
           <Link
