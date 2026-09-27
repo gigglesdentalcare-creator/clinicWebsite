@@ -62,18 +62,45 @@ export type ImageWithAlt = {
   alt?: string;
 };
 
-export type RecommendedProduct = {
+export type ProductCategory = {
   _id: string;
-  _type: "recommendedProduct";
+  _type: "productCategory";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  name?: string;
-  brand?: string;
-  image?: ImageWithAlt;
+  title?: string;
   description?: string;
-  link?: string;
+  products?: Array<{
+    link?: string;
+    name?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    note?: string;
+    _type: "productLink";
+    _key: string;
+  }>;
   order?: number;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type RecommendationsPage = {
@@ -263,6 +290,38 @@ export type HomePage = {
     _type: "stat";
     _key: string;
   }>;
+  productsWeUseTitle?: string;
+  productsWeUseIntro?: string;
+  productsWeUse?: Array<{
+    name?: string;
+    image?: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    text?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    _type: "productWeUse";
+    _key: string;
+  }>;
   featuredTreatments?: Array<
     {
       _key: string;
@@ -328,22 +387,6 @@ export type Geopoint = {
   lat?: number;
   lng?: number;
   alt?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -441,7 +484,9 @@ export type AllSanitySchemaTypes =
   | BlockContent
   | SanityImageAssetReference
   | ImageWithAlt
-  | RecommendedProduct
+  | ProductCategory
+  | SanityImageCrop
+  | SanityImageHotspot
   | RecommendationsPage
   | Page
   | Slug
@@ -458,8 +503,6 @@ export type AllSanitySchemaTypes =
   | HomePage
   | SiteSettings
   | Geopoint
-  | SanityImageCrop
-  | SanityImageHotspot
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -754,6 +797,41 @@ export type HeroQueryResult = {
 } | null;
 
 // Source: sanity/lib/queries.ts
+// Variable: productsWeUseQuery
+// Query: *[_type == "homePage"][0]{  "title": productsWeUseTitle,  "intro": productsWeUseIntro,  "items": productsWeUse[defined(name)]{    _key, name, text,    "image": image{      "url": asset->url,      "width": asset->metadata.dimensions.width,      "height": asset->metadata.dimensions.height    }  }}
+export type ProductsWeUseQueryResult = {
+  title: string | null;
+  intro: string | null;
+  items: Array<{
+    _key: string;
+    name: string;
+    text: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+    image: {
+      url: string | null;
+      width: number | null;
+      height: number | null;
+    } | null;
+  }> | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: recommendationsPageQuery
 // Query: *[_type == "recommendationsPage"][0]{ title, intro }
 export type RecommendationsPageQueryResult = {
@@ -762,20 +840,23 @@ export type RecommendationsPageQueryResult = {
 } | null;
 
 // Source: sanity/lib/queries.ts
-// Variable: recommendedProductsQuery
-// Query: *[_type == "recommendedProduct"] | order(order asc, name asc){  _id, name, brand, description, link,  "image": image{    alt,    "url": asset->url,    "width": asset->metadata.dimensions.width,    "height": asset->metadata.dimensions.height  }}
-export type RecommendedProductsQueryResult = Array<{
+// Variable: productCategoriesQuery
+// Query: *[_type == "productCategory"] | order(order asc, title asc){  _id, title, description,  "products": products[defined(link) && defined(name) && defined(image.asset)]{    _key, name, link, note,    "image": image{      "url": asset->url,      "width": asset->metadata.dimensions.width,      "height": asset->metadata.dimensions.height    }  }}
+export type ProductCategoriesQueryResult = Array<{
   _id: string;
-  name: string | null;
-  brand: string | null;
+  title: string | null;
   description: string | null;
-  link: string | null;
-  image: {
-    alt: string | null;
-    url: string | null;
-    width: number | null;
-    height: number | null;
-  } | null;
+  products: Array<{
+    _key: string;
+    name: string;
+    link: string;
+    note: string | null;
+    image: {
+      url: string | null;
+      width: number | null;
+      height: number | null;
+    };
+  }> | null;
 }>;
 
 // Query TypeMap
@@ -795,8 +876,9 @@ declare global {
     '*[_type == "post" && defined(slug.current)]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[_type == "page" && slug.current == $slug][0]{\n  _id, title, "slug": slug.current, body, seo\n}': PageBySlugQueryResult;
     '*[_type == "homePage"][0]{\n  "headline": heroHeadline,\n  "highlight": heroHighlight,\n  "subheadline": heroSubheadline,\n  "videoUrl": select(heroVideo.asset->size > 0 => heroVideo.asset->url),\n  "videoMimeType": select(heroVideo.asset->size > 0 => heroVideo.asset->mimeType)\n}': HeroQueryResult;
+    '*[_type == "homePage"][0]{\n  "title": productsWeUseTitle,\n  "intro": productsWeUseIntro,\n  "items": productsWeUse[defined(name)]{\n    _key, name, text,\n    "image": image{\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height\n    }\n  }\n}': ProductsWeUseQueryResult;
     '*[_type == "recommendationsPage"][0]{ title, intro }': RecommendationsPageQueryResult;
-    '*[_type == "recommendedProduct"] | order(order asc, name asc){\n  _id, name, brand, description, link,\n  "image": image{\n    alt,\n    "url": asset->url,\n    "width": asset->metadata.dimensions.width,\n    "height": asset->metadata.dimensions.height\n  }\n}': RecommendedProductsQueryResult;
+    '*[_type == "productCategory"] | order(order asc, title asc){\n  _id, title, description,\n  "products": products[defined(link) && defined(name) && defined(image.asset)]{\n    _key, name, link, note,\n    "image": image{\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height\n    }\n  }\n}': ProductCategoriesQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

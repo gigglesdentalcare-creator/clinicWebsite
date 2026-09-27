@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import Footer from "@/components/layout/Footer";
@@ -8,6 +9,23 @@ import MotionProvider from "@/components/motion/MotionProvider";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { getSiteInfo } from "@/lib/site-info";
 import { SanityLive } from "@/sanity/lib/live";
+
+// Browser-tab and home-screen icons come from the logo uploaded in Studio, padded to a white
+// square by Sanity's image CDN (the logo is drawn for a light background, as in the header).
+export async function generateMetadata(): Promise<Metadata> {
+  const { logo } = await getSiteInfo();
+  if (!logo) return {};
+  const square = (size: number) => `${logo.url}?w=${size}&h=${size}&fit=fill&bg=ffffff&fm=png`;
+  return {
+    icons: {
+      icon: [
+        { url: square(32), sizes: "32x32", type: "image/png" },
+        { url: square(192), sizes: "192x192", type: "image/png" },
+      ],
+      apple: { url: square(180), sizes: "180x180", type: "image/png" },
+    },
+  };
+}
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const [info, { isEnabled: isDraftMode }] = await Promise.all([getSiteInfo(), draftMode()]);

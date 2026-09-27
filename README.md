@@ -108,9 +108,10 @@ Copy `.env.example` to `.env.local` (git-ignored, never commit it).
 
 1. **Allow the site in Sanity** (also covered in the run steps above) — at <https://www.sanity.io/manage> → your project → **API → CORS origins**, add the exact URL you open the site from (tick *Allow credentials*): `http://localhost:3000` locally, or your Codespaces URL such as `https://<codespace-name>-3000.app.github.dev`. Add your Vercel and production domains the same way later. Don't use a wildcard like `https://*.app.github.dev` — that would let other people's Codespaces make credentialed requests to your project.
 2. **Log in to the Studio** at `/studio` and fill in **Clinic details & settings** — the phone/WhatsApp numbers there replace the placeholders in [lib/site.ts](lib/site.ts) across the site.
-   - **Add recommended products** under **Recommended product** — name, image, description and a link to where it's sold; they appear on `/recommendations`, ordered by the `order` field. The page's own title/intro is under **Recommendations page**.
+   - **Add recommended products** under **Product category** — create a category (e.g. "Toothpaste"), then add products to it by pasting a link (Amazon or any shop). The name and photo are fetched from the link automatically (or with the **Fetch title & photo from link** button) and can be edited; an optional note says why the clinic recommends it. Categories appear on `/recommendations`, ordered by the `order` field. The page's own title/intro is under **Recommendations page**.
    - **Add the team** under **Doctor** — name, photo and bio show on `/team`; qualifications, specialisation and registration number show too, if filled in.
    - **Add social links** under **Clinic details & settings → Social & reviews** — Instagram and Facebook links show on `/contact` with icons; LinkedIn/X/YouTube show too, with a plain icon since brand icons for those aren't available (see [Known issues](#known-issues)).
+   - **Add "Products we use"** under **Home page → Products we use** — a grid of blocks on the home page, each with a name, an optional logo/photo and a short text (with links) that appears on hover, or on tap on phones. The section stays hidden until at least one block is added.
    - **Add a hero background video** under **Home page → Hero background video** — a short (10–20s) looping MP4 (ideally under 8 MB) that plays silently, in black and white and full window width, behind the home page headline. It's optional: remove it to go back to the plain background. Visitors with *reduce motion* turned on never see it play. Only use footage where any patient shown has agreed to appear.
 3. **Draft preview (optional)** — create an API token with the *Viewer* role (Manage → API → Tokens) and set it as `SANITY_API_READ_TOKEN`. Then use the **Presentation** tool in the Studio to preview unpublished changes.
 4. **Live updates in production** — in Manage → API → Webhooks, create a webhook to `https://<your-domain>/api/revalidate` for create/update/delete, projection `{_type}`, with a secret that matches `SANITY_REVALIDATE_SECRET`. Published edits then appear on the next page visit.
@@ -153,7 +154,7 @@ components/icons/            Hand-drawn Instagram/Facebook icons — see "Known 
 components/seo/              LocalBusinessJsonLd (structured data)
 lib/site.ts                  Fallback clinic details + nav links
 lib/site-info.ts             Clinic details from the CMS (incl. address, email, hours, social links), falling back to lib/site.ts
-sanity/schemaTypes/          Content models (treatments, doctors, testimonials, gallery, FAQs, blog, pages, recommended products…)
+sanity/schemaTypes/          Content models (treatments, doctors, testimonials, gallery, FAQs, blog, pages, product categories…)
 sanity/lib/                  Sanity client, live fetch helper, GROQ queries, image URLs, cache tags
 sanity.config.ts             Studio configuration
 sanity.types.ts              Generated types (do not edit by hand)
