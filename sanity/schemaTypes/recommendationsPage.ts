@@ -1,8 +1,8 @@
 import { StarIcon } from "@sanity/icons/Star";
 import { defineField, defineType } from "sanity";
 
-// Singleton: the title/intro text on /recommendations. The products themselves are separate
-// `recommendedProduct` documents (sanity/schemaTypes/recommendedProduct.ts).
+// Singleton: the title/intro text on /recommendations. The products themselves live in
+// `productCategory` documents (sanity/schemaTypes/productCategory.ts).
 export const recommendationsPage = defineType({
   name: "recommendationsPage",
   title: "Recommendations page",

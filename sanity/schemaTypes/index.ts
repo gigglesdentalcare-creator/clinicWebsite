@@ -7,7 +7,7 @@ import { blockContent, imageWithAlt, seo } from "./objects";
 import { page } from "./page";
 import { post } from "./post";
 import { recommendationsPage } from "./recommendationsPage";
-import { recommendedProduct } from "./recommendedProduct";
+import { productCategory } from "./productCategory";
 import { siteSettings } from "./siteSettings";
 import { testimonial } from "./testimonial";
 import { treatment } from "./treatment";
@@ -24,7 +24,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   post,
   page,
   recommendationsPage,
-  recommendedProduct,
+  productCategory,
   // shared objects
   imageWithAlt,
   blockContent,
