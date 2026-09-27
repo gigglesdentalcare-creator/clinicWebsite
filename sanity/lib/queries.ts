@@ -76,6 +76,19 @@ export const heroQuery = defineQuery(`*[_type == "homePage"][0]{
   "videoMimeType": select(heroVideo.asset->size > 0 => heroVideo.asset->mimeType)
 }`);
 
+export const productsWeUseQuery = defineQuery(`*[_type == "homePage"][0]{
+  "title": productsWeUseTitle,
+  "intro": productsWeUseIntro,
+  "items": productsWeUse[defined(name)]{
+    _key, name, text,
+    "image": image{
+      "url": asset->url,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height
+    }
+  }
+}`);
+
 export const recommendationsPageQuery =defineQuery(`*[_type == "recommendationsPage"][0]{ title, intro }`);
 
 // Only products with a link, name and photo — skips one an editor is still filling in.

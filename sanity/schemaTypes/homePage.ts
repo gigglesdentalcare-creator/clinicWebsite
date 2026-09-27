@@ -6,6 +6,14 @@ export const homePage = defineType({
   title: "Home page",
   type: "document",
   icon: HomeIcon,
+  fieldsets: [
+    {
+      name: "productsWeUse",
+      title: "Products we use",
+      description: "A grid of blocks on the home page; hovering (or tapping) a block shows its text. Hidden until a block is added.",
+      options: { collapsible: true, collapsed: true },
+    },
+  ],
   fields: [
     defineField({
       name: "heroHeadline",
@@ -55,6 +63,81 @@ export const homePage = defineType({
         }),
       ],
       validation: (r) => r.max(4),
+    }),
+    defineField({
+      name: "productsWeUseTitle",
+      title: "Section title",
+      type: "string",
+      fieldset: "productsWeUse",
+      initialValue: "Products we use",
+    }),
+    defineField({
+      name: "productsWeUseIntro",
+      title: "Intro",
+      type: "text",
+      rows: 2,
+      fieldset: "productsWeUse",
+      description: "Optional line under the title.",
+    }),
+    defineField({
+      name: "productsWeUse",
+      title: "Blocks",
+      type: "array",
+      fieldset: "productsWeUse",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "productWeUse",
+          title: "Block",
+          fields: [
+            defineField({ name: "name", type: "string", description: "e.g. Invisalign", validation: (r) => r.required() }),
+            defineField({
+              name: "image",
+              title: "Logo or photo",
+              type: "image",
+              description: "Optional. Shown on the block; without one, the block shows just the name.",
+            }),
+            defineField({
+              name: "text",
+              title: "Text shown on hover",
+              type: "array",
+              description: "Keep it short, a sentence or two. Select words and use the link button to add a link.",
+              of: [
+                defineArrayMember({
+                  type: "block",
+                  styles: [{ title: "Normal", value: "normal" }],
+                  lists: [],
+                  marks: {
+                    decorators: [
+                      { title: "Bold", value: "strong" },
+                      { title: "Italic", value: "em" },
+                    ],
+                    annotations: [
+                      {
+                        name: "link",
+                        type: "object",
+                        title: "Link",
+                        fields: [
+                          defineField({
+                            name: "href",
+                            type: "url",
+                            title: "URL",
+                            description: "A full web address, or a page on this site such as /contact.",
+                            validation: (rule) =>
+                              rule.uri({ scheme: ["http", "https", "mailto", "tel"], allowRelative: true }).required(),
+                          }),
+                        ],
+                      },
+                    ],
+                  },
+                }),
+              ],
+              validation: (r) => r.required(),
+            }),
+          ],
+          preview: { select: { title: "name", media: "image" } },
+        }),
+      ],
     }),
     defineField({ name: "featuredTreatments", type: "array", of: [defineArrayMember({ type: "reference", to: [{ type: "treatment" }] })], validation: (r) => r.max(6) }),
     defineField({ name: "featuredDoctors", type: "array", of: [defineArrayMember({ type: "reference", to: [{ type: "doctor" }] })] }),
