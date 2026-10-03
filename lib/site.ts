@@ -41,7 +41,6 @@ export type SiteInfo = {
 
 export const navLinks = [
   { href: "/treatments", label: "Treatments" },
-  { href: "/kids-dentistry", label: "Kids" },
   { href: "/team", label: "Our Team" },
   { href: "/smile-stories", label: "Smile Stories" },
   { href: "/recommendations", label: "Recommendations" },

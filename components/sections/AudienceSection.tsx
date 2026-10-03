@@ -10,21 +10,21 @@ const audiences = [
     title: "Kids",
     icon: Baby,
     body: "Gentle first visits, check-ups and cavity prevention, in a calm setting made for little ones.",
-    href: "/kids-dentistry",
+    href: "/treatments#kids",
     tone: "bg-accent/20", // logo pink
   },
   {
     title: "Adults",
     icon: User,
     body: "Implants, smile designing, aligners, braces, root canal treatments, crowns and bridges, whitening and more.",
-    href: "/treatments",
+    href: "/treatments#adults",
     tone: "bg-primary/10", // logo blue
   },
   {
     title: "Whole family",
     icon: Users,
     body: "Book everyone in together. One clinic and one friendly team who get to know the whole family.",
-    href: "/book",
+    href: "/treatments",
     tone: "bg-ink/5", // neutral — both colors combined
   },
 ] as const;
