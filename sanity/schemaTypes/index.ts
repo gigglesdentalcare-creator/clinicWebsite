@@ -9,6 +9,8 @@ import { post } from "./post";
 import { recommendationsPage } from "./recommendationsPage";
 import { productCategory } from "./productCategory";
 import { siteSettings } from "./siteSettings";
+import { smileCase } from "./smileCase";
+import { smileStoriesPage } from "./smileStoriesPage";
 import { testimonial } from "./testimonial";
 import { treatment } from "./treatment";
 
@@ -25,6 +27,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   page,
   recommendationsPage,
   productCategory,
+  smileStoriesPage,
+  smileCase,
   // shared objects
   imageWithAlt,
   blockContent,
@@ -32,4 +36,4 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 ];
 
 // Documents that exist exactly once. Studio shows them as single items (see structure.ts).
-export const singletonTypes = ["siteSettings", "homePage", "recommendationsPage"];
+export const singletonTypes = ["siteSettings", "homePage", "recommendationsPage", "smileStoriesPage"];

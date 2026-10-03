@@ -1,7 +1,7 @@
 import type { StructureResolver } from "sanity/structure";
 import { singletonTypes } from "./schemaTypes";
 
-// Sidebar layout for staff: the two one-off documents first, then everything else.
+// Sidebar layout for staff: the one-off documents first, then everything else.
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Website content")
@@ -18,6 +18,10 @@ export const structure: StructureResolver = (S) =>
         .title("Recommendations page")
         .id("recommendationsPage")
         .child(S.document().schemaType("recommendationsPage").documentId("recommendationsPage")),
+      S.listItem()
+        .title("Smile stories page")
+        .id("smileStoriesPage")
+        .child(S.document().schemaType("smileStoriesPage").documentId("smileStoriesPage")),
       S.divider(),
       ...S.documentTypeListItems().filter((item) => !singletonTypes.includes(item.getId() ?? "")),
     ]);

@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { PortableText, type PortableTextComponents } from "next-sanity";
 import { Image } from "next-sanity/image";
 import Link from "next/link";
@@ -91,6 +91,17 @@ export default function ProductsWeUse({ content }: { content: ProductsWeUseConte
           );
         })}
       </RevealGroup>
+
+      {/* Leads on from the clinic's own products to what we recommend for at-home care. */}
+      <div className="mt-10 flex justify-center">
+        <Link
+          href="/recommendations"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-primary-dark"
+        >
+          Oral Hygiene Care
+          <ArrowRight size={16} aria-hidden />
+        </Link>
+      </div>
     </section>
   );
 }

@@ -1,16 +1,6 @@
 import { HeartIcon } from "@sanity/icons/Heart";
 import { defineArrayMember, defineField, defineType } from "sanity";
-
-export const treatmentCategories = [
-  { title: "Check-ups & prevention", value: "preventive" },
-  { title: "Fillings & restorations", value: "restorative" },
-  { title: "Root canal", value: "endodontics" },
-  { title: "Braces & aligners", value: "orthodontics" },
-  { title: "Cosmetic & whitening", value: "cosmetic" },
-  { title: "Implants & dentures", value: "prosthetics" },
-  { title: "Gum care", value: "gum-care" },
-  { title: "Extractions & surgery", value: "surgery" },
-];
+import { treatmentCategories } from "../../lib/treatment-categories";
 
 export const treatment = defineType({
   name: "treatment",

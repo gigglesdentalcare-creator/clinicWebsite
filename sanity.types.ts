@@ -62,6 +62,32 @@ export type ImageWithAlt = {
   alt?: string;
 };
 
+export type SmileCase = {
+  _id: string;
+  _type: "smileCase";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  treatment?: string;
+  duration?: string;
+  description?: string;
+  beforeImage?: ImageWithAlt;
+  afterImage?: ImageWithAlt;
+  consent?: boolean;
+  order?: number;
+};
+
+export type SmileStoriesPage = {
+  _id: string;
+  _type: "smileStoriesPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  intro?: string;
+};
+
 export type ProductCategory = {
   _id: string;
   _type: "productCategory";
@@ -262,6 +288,13 @@ export type SanityFileAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
 };
 
+export type SmileCaseReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "smileCase";
+};
+
 export type TestimonialReference = {
   _ref: string;
   _type: "reference";
@@ -322,6 +355,11 @@ export type HomePage = {
     _type: "productWeUse";
     _key: string;
   }>;
+  featuredSmileStories?: Array<
+    {
+      _key: string;
+    } & SmileCaseReference
+  >;
   featuredTreatments?: Array<
     {
       _key: string;
@@ -484,6 +522,8 @@ export type AllSanitySchemaTypes =
   | BlockContent
   | SanityImageAssetReference
   | ImageWithAlt
+  | SmileCase
+  | SmileStoriesPage
   | ProductCategory
   | SanityImageCrop
   | SanityImageHotspot
@@ -499,6 +539,7 @@ export type AllSanitySchemaTypes =
   | Doctor
   | Treatment
   | SanityFileAssetReference
+  | SmileCaseReference
   | TestimonialReference
   | HomePage
   | SiteSettings
@@ -859,6 +900,81 @@ export type ProductCategoriesQueryResult = Array<{
   }> | null;
 }>;
 
+// Source: sanity/lib/queries.ts
+// Variable: smileStoriesPageQuery
+// Query: *[_type == "smileStoriesPage"][0]{ title, intro }
+export type SmileStoriesPageQueryResult = {
+  title: string | null;
+  intro: string | null;
+} | null;
+
+// Source: sanity/lib/queries.ts
+// Variable: smileCasesQuery
+// Query: *[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]  | order(order asc, _createdAt desc) {  _id, title, treatment, duration, description,  "before": beforeImage{ alt, asset, hotspot, crop },  "after": afterImage{ alt, asset, hotspot, crop }}
+export type SmileCasesQueryResult = Array<{
+  _id: string;
+  title: string | null;
+  treatment: string | null;
+  duration: string | null;
+  description: string | null;
+  before: {
+    alt: string | null;
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  after: {
+    alt: string | null;
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+}>;
+
+// Source: sanity/lib/queries.ts
+// Variable: featuredSmileCasesQuery
+// Query: {  "picked": *[_type == "homePage"][0].featuredSmileStories[]->[consent == true && defined(beforeImage.asset) && defined(afterImage.asset)] {  _id, title, treatment, duration, description,  "before": beforeImage{ alt, asset, hotspot, crop },  "after": afterImage{ alt, asset, hotspot, crop }},  "latest": *[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]    | order(order asc, _createdAt desc)[0...3] {  _id, title, treatment, duration, description,  "before": beforeImage{ alt, asset, hotspot, crop },  "after": afterImage{ alt, asset, hotspot, crop }}}
+export type FeaturedSmileCasesQueryResult = {
+  picked: Array<{
+    _id: string;
+    title: string | null;
+    treatment: string | null;
+    duration: string | null;
+    description: string | null;
+    before: {
+      alt: string | null;
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    after: {
+      alt: string | null;
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }> | null;
+  latest: Array<{
+    _id: string;
+    title: string | null;
+    treatment: string | null;
+    duration: string | null;
+    description: string | null;
+    before: {
+      alt: string | null;
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    after: {
+      alt: string | null;
+      asset: SanityImageAssetReference | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -879,6 +995,9 @@ declare global {
     '*[_type == "homePage"][0]{\n  "title": productsWeUseTitle,\n  "intro": productsWeUseIntro,\n  "items": productsWeUse[defined(name)]{\n    _key, name, text,\n    "image": image{\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height\n    }\n  }\n}': ProductsWeUseQueryResult;
     '*[_type == "recommendationsPage"][0]{ title, intro }': RecommendationsPageQueryResult;
     '*[_type == "productCategory"] | order(order asc, title asc){\n  _id, title, description,\n  "products": products[defined(link) && defined(name) && defined(image.asset)]{\n    _key, name, link, note,\n    "image": image{\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height\n    }\n  }\n}': ProductCategoriesQueryResult;
+    '*[_type == "smileStoriesPage"][0]{ title, intro }': SmileStoriesPageQueryResult;
+    '*[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]\n  | order(order asc, _createdAt desc) {\n  _id, title, treatment, duration, description,\n  "before": beforeImage{ alt, asset, hotspot, crop },\n  "after": afterImage{ alt, asset, hotspot, crop }\n}': SmileCasesQueryResult;
+    '{\n  "picked": *[_type == "homePage"][0].featuredSmileStories[]->[consent == true && defined(beforeImage.asset) && defined(afterImage.asset)] {\n  _id, title, treatment, duration, description,\n  "before": beforeImage{ alt, asset, hotspot, crop },\n  "after": afterImage{ alt, asset, hotspot, crop }\n},\n  "latest": *[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]\n    | order(order asc, _createdAt desc)[0...3] {\n  _id, title, treatment, duration, description,\n  "before": beforeImage{ alt, asset, hotspot, crop },\n  "after": afterImage{ alt, asset, hotspot, crop }\n}\n}': FeaturedSmileCasesQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

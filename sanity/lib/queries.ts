@@ -103,3 +103,22 @@ export const productCategoriesQuery = defineQuery(`*[_type == "productCategory"]
     }
   }
 }`);
+
+// Before/after cases. Only ones with patient consent and both photos are ever returned.
+const smileCaseFields = `{
+  _id, title, treatment, duration, description,
+  "before": beforeImage{ alt, asset, hotspot, crop },
+  "after": afterImage{ alt, asset, hotspot, crop }
+}`;
+
+export const smileStoriesPageQuery = defineQuery(`*[_type == "smileStoriesPage"][0]{ title, intro }`);
+
+export const smileCasesQuery = defineQuery(`*[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]
+  | order(order asc, _createdAt desc) ${smileCaseFields}`);
+
+// Home page: the hand-picked cases, or else the first three by display order.
+export const featuredSmileCasesQuery = defineQuery(`{
+  "picked": *[_type == "homePage"][0].featuredSmileStories[]->[consent == true && defined(beforeImage.asset) && defined(afterImage.asset)] ${smileCaseFields},
+  "latest": *[_type == "smileCase" && consent == true && defined(beforeImage.asset) && defined(afterImage.asset)]
+    | order(order asc, _createdAt desc)[0...3] ${smileCaseFields}
+}`);
